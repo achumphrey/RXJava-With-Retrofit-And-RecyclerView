@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.rxjavawithretrofitandrecyclerview.model.StarWarsModel
 import com.example.rxjavawithretrofitandrecyclerview.network.ClientInterface
 import com.example.rxjavawithretrofitandrecyclerview.network.RetrofitInstance
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -18,14 +19,17 @@ class PresenterImp(_view: ViewInterface): PresenterInterface {
         val starWarsModelInterface =
             RetrofitInstance().retrofitInstance.create(ClientInterface::class.java)
 
-        val call = starWarsModelInterface.getNewsRecords()
+        val starWarsModelObservable: Observable<StarWarsModel>
+                = starWarsModelInterface.getNewsRecords()
 
-        call.subscribeOn(Schedulers.io())
+        starWarsModelObservable
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(starWarsObserver())
     }
 
     private fun starWarsObserver(): Observer<StarWarsModel>{
+
         return object : Observer<StarWarsModel>{
 
             override fun onComplete() {

@@ -9,6 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+<!-- This layout is used for inflating the view of the ViewHolder class of the adapter -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/row"
