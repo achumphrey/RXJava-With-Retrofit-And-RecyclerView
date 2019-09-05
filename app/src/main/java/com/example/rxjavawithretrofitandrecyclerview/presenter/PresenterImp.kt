@@ -7,12 +7,15 @@ import com.example.rxjavawithretrofitandrecyclerview.network.RetrofitInstance
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class PresenterImp(_view: ViewInterface): PresenterInterface {
 
     var view: ViewInterface? = _view
+    var compositeDisposable = CompositeDisposable()
+    lateinit var disposable: Disposable
 
     override fun processCall() {
 
@@ -36,6 +39,7 @@ class PresenterImp(_view: ViewInterface): PresenterInterface {
             }
 
             override fun onSubscribe(d: Disposable) {
+                compositeDisposable.add(d)
             }
 
             override fun onNext(t: StarWarsModel) {
@@ -50,5 +54,7 @@ class PresenterImp(_view: ViewInterface): PresenterInterface {
 
     override fun onDestroy() {
         view = null
+        disposable.dispose()
+        compositeDisposable.clear()
     }
 }
